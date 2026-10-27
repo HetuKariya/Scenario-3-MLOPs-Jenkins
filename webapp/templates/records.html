@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Records</title>
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --border: #e5e7eb;
+            --row-hover: #eef2ff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 40px 16px;
+            font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background: var(--primary-dark); }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        thead th {
+            background: var(--primary);
+            color: #fff;
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        tbody tr:nth-child(even) { background: #fafbff; }
+        tbody tr:hover { background: var(--row-hover); }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .id-col { color: var(--muted); font-weight: 600; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge.setosa     { background: #dcfce7; color: #166534; }
+        .badge.versicolor { background: #fef3c7; color: #92400e; }
+        .badge.virginica  { background: #fce7f3; color: #9d174d; }
+
+        .empty {
+            text-align: center;
+            padding: 48px 16px;
+            color: var(--muted);
+        }
+
+        .empty p { margin: 0 0 16px; }
+
+        .footer {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Prediction Records</h1>
+                <div class="subtitle">All predictions saved in the database</div>
+            </div>
+            <a class="btn" href="{{ url_for('index') }}">+ New Prediction</a>
+        </div>
+
+        <div class="card">
+            {% if records %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sepal Length</th>
+                            <th>Sepal Width</th>
+                            <th>Petal Length</th>
+                            <th>Petal Width</th>
+                            <th>Prediction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td class="id-col">{{ r.id }}</td>
+                            <td>{{ r.sl }}</td>
+                            <td>{{ r.sw }}</td>
+                            <td>{{ r.pl }}</td>
+                            <td>{{ r.pw }}</td>
+                            <td><span class="badge {{ r.prediction | lower }}">{{ r.prediction }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty">
+                <p>No predictions yet.</p>
+                <a class="btn" href="{{ url_for('index') }}">Make your first prediction</a>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if records %}
+        <div class="footer">{{ records | length }} record{{ 's' if records | length != 1 }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

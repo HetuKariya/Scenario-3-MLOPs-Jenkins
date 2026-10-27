@@ -1,0 +1,33 @@
+version:  '3.14'
+services:
+  dbapp:
+    build:
+      context:  ./dbapp
+    image:  dbapp:v1
+    container_name:  dbapp
+    volumes:
+      -  dbdata:/app/data
+    ports:
+      -  "8001:8001"
+    networks:
+      -  appnet
+    
+  webapp: 
+    build:
+      context:  ./webapp
+    image:  webapp:v1
+    container_name:  webapp
+    ports:
+      -  "5000:5000"
+    networks:
+      -  appnet
+    depends_on:
+      -  dbapp
+    environment:
+      -  DB_URL=http://dbapp:8001
+  
+volumes:
+  dbdata:
+  
+networks:
+  appnet:
