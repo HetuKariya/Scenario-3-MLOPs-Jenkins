@@ -11,7 +11,7 @@ pipeline {
                 // Scenario 3: REMOTE git repository (GitHub)
                 // Replace the URL with your repo; for a private repo, add: credentialsId: 'github-creds'
                 git branch: 'main',
-                    url: 'https://github.com/your-username/your-repo.git'
+                    url: 'https://github.com/HetuKariya/Scenario-3-MLOPs-Jenkins'
             }
         }
         stage('Show Workspace') {
